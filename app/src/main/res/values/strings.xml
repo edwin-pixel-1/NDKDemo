@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">DemoNDK</string>
     <string name="add_name">Add Name</string>
+    <string name="opengl">OpenGL</string>
 </resources>
