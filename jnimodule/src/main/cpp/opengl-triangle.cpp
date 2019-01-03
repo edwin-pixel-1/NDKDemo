@@ -3,25 +3,24 @@
 //
 
 #include <jni.h>
-#include <string>
 #include <android/log.h>
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-using namespace std;
+#include <math.h>
 
 void renderFrame();
 
 void setupGL(jint w, jint h);
 
 GLuint vertexbuffer;
-const GLfloat gTriangleVertices[] = {0.0f, 0.5f, -0.5f, -0.5f,
-                                     0.5f, -0.5f};
+float gTriangleVertices[] = {0.0f, 0.5f, -0.5f, -0.5f,
+                             0.5f, -0.5f};
 
 GLuint gProgram;
 GLuint gvPositionHandle;
+
 
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     JNIEnv *env;
@@ -113,6 +112,65 @@ GLuint createProgram(const char *pVertexSource, const char *pFragmentSource) {
     return program;
 }
 
+/* [matrixIdentity] */
+void matrixIdentityFunction(float *matrix) {
+    if (matrix == NULL) {
+        return;
+    }
+
+    matrix[0] = 1.0f;
+    matrix[1] = 0.0f;
+    matrix[2] = 0.0f;
+    matrix[3] = 0.0f;
+    matrix[4] = 0.0f;
+    matrix[5] = 1.0f;
+    matrix[6] = 0.0f;
+    matrix[7] = 0.0f;
+    matrix[8] = 0.0f;
+    matrix[9] = 0.0f;
+    matrix[10] = 1.0f;
+    matrix[11] = 0.0f;
+    matrix[12] = 0.0f;
+    matrix[13] = 0.0f;
+    matrix[14] = 0.0f;
+    matrix[15] = 1.0f;
+}
+
+float matrixDegreesToRadians(float degrees)
+{
+    return M_PI * degrees / 180.0f;
+}
+
+void matrixMultiply(float* destination, float* operand1, float* operand2)
+{
+    float theResult[16];
+    int i,j = 0;
+    for(i = 0; i < 4; i++)
+    {
+        for(j = 0; j < 4; j++)
+        {
+            theResult[4 * i + j] = operand1[j] * operand2[4 * i] + operand1[4 + j] * operand2[4 * i + 1] +
+                                   operand1[8 + j] * operand2[4 * i + 2] + operand1[12 + j] * operand2[4 * i + 3];
+        }
+    }
+
+    for(int i = 0; i < 16; i++)
+    {
+        destination[i] = theResult[i];
+    }
+}
+
+void matrixRotateZ(float *matrix, float angle) {
+    float tempMatrix[16];
+
+    matrixIdentityFunction(tempMatrix);
+    tempMatrix[0] = cos(matrixDegreesToRadians(angle));
+    tempMatrix[4] = -sin(matrixDegreesToRadians(angle));
+    tempMatrix[1] = sin(matrixDegreesToRadians(angle));
+    tempMatrix[5] = cos(matrixDegreesToRadians(angle));
+    matrixMultiply(matrix, tempMatrix, matrix);
+}
+
 void setupGL(jint w, jint h) {
     gProgram = createProgram(gVertexShader, gFragmentShader);
     if (!gProgram) {
@@ -124,7 +182,7 @@ void setupGL(jint w, jint h) {
 }
 
 void renderFrame() {
-    __android_log_print(ANDROID_LOG_ERROR, "ALERT native", "1");
+    //__android_log_print(ANDROID_LOG_ERROR, "ALERT native", "1");
     static float grey = 0.01f;
     grey += 0.01f;
     if (grey > 1.0f) {
@@ -134,6 +192,8 @@ void renderFrame() {
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     glUseProgram(gProgram);
+
+    matrixRotateZ(gTriangleVertices, 2.0f);
 
     glVertexAttribPointer(
             gvPositionHandle,
@@ -148,3 +208,4 @@ void renderFrame() {
 
     glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
 }
+

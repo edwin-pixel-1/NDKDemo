@@ -17,7 +17,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        gl.glViewport(0, 0, width, height);
+        Log.i("DEMO", "w:"+width);
+        Log.i("DEMO", "h:"+height);
         NativeGL.init(width, height);
     }
 

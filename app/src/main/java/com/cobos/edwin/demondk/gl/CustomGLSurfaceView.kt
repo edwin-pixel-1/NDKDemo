@@ -30,20 +30,19 @@ class CustomGLSurfaceView : GLSurfaceView {
         val supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000 || Utils.isProbablyEmulator()
 
 
-        Log.e("ALERT: ", "check "+supportsEs2)
+        Log.e("DEMO ALERT: ", "check "+supportsEs2)
         if (supportsEs2) {
 
             if (Utils.isProbablyEmulator()) {
-                Log.e("ALERT: ", "IS EMULATOR")
+                Log.e("DEMO ALERT: ", "IS EMULATOR")
                 // Avoids crashes on startup with some emulator images.
                 setEGLConfigChooser(8, 8, 8, 8, 16, 0)
             }
 
             setEGLContextClientVersion(2)
             setRenderer(GLRenderer())
-            renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
+            renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
             rendererSet = true
-            //setContentView(glSurfaceView)
         }
     }
 }

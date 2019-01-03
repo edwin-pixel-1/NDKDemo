@@ -5,12 +5,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 add_library(
         opengl-triangle
         SHARED
-        src/main/cpp/opengl-triangle.cpp)
+        opengl-triangle.cpp)
 
 add_library(
         native-lib-gl
         SHARED
-        src/main/cpp/native-lib-gl.cpp)
+        native-lib-gl.cpp)
 
 find_library(
         log-lib

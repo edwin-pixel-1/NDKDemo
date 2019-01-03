@@ -2,4 +2,7 @@
     <string name="app_name">DemoNDK</string>
     <string name="add_name">Add Name</string>
     <string name="opengl">OpenGL</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

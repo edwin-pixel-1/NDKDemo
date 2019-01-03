@@ -11,7 +11,8 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags "-fexceptions -frtti"
+                cppFlags "-fexceptions -frtti -v"
+                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-9', '-DANDROID_TOOLCHAIN=clang'
             }
         }
     }
@@ -24,7 +25,7 @@ android {
     }
     externalNativeBuild {
         cmake {
-            path "CMakeLists.txt"
+            path "src/main/cpp/CMakeLists.txt"
         }
     }
 

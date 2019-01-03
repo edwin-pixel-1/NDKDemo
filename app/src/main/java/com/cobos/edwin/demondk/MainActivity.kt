@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.Button
+import android.widget.FrameLayout
 import com.cobos.edwin.demondk.gl.GLActivity
+import com.cobos.edwin.demondk.gl.GLFragment
 import com.cobos.edwin.jnimodule.NativeModule
 
 
@@ -21,8 +23,16 @@ class MainActivity : AppCompatActivity() {
 
         initList()
         initButtons()
+        initGL()
     }
 
+    private fun initGL() {
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        val fragment = GLFragment()
+        fragmentTransaction.add(R.id.glContainer, fragment)
+        fragmentTransaction.commit()
+    }
 
 
     private fun initList() {
